@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.markdown('### Bem vindo!')
-st.markdown('### Neste app, você poderá verifica o histórico de utilização de qualquer nome, usando a base do IBGE')
+st.markdown('### Neste app, você poderá verificar o histórico de utilização de qualquer nome, usando a base do IBGE')
 st.markdown('### Período considerado: 1930 a 2010, por década.')
 st.markdown('### Considerações importantes:')
 

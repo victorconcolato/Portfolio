@@ -15,11 +15,15 @@ nome_1 = st.session_state['nome_1']
 enviar = st.button('Enviar')
 st.divider()
 try:
-    url = f"https://servicodados.ibge.gov.br/api/v2/censos/nomes/{nome_0}|{nome_1}"
-    resposta = requests.get(url)
-    resposta = resposta.json().copy()
-    if enviar and nome_0!="" and nome_1!="":        
+    @st.cache_data
+    def requisicao_ibge():
+        url = f"https://servicodados.ibge.gov.br/api/v2/censos/nomes/{nome_0}|{nome_1}"
+        resposta = requests.get(url)
+        return resposta.json()
+    
+    resposta = requisicao_ibge()
 
+    if enviar and nome_0!="" and nome_1!="":
         
 #Se resposta não for vazio, FAÇA:
         if resposta:
