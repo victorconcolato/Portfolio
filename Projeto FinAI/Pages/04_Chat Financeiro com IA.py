@@ -2,37 +2,64 @@ import streamlit as st
 
 st.markdown("# Chat Financeiro com IA")
 
-# Histórico de mensagens (pode ser uma lista simples)
+# Histórico
 if "historico" not in st.session_state:
     st.session_state.historico = []
 
-# Container onde as mensagens aparecem
-chat_container = st.container()
+# Caixa com scroll
+chat_box = st.container()
 
-# Container do input
-input_container = st.container()
+with chat_box:
+    st.markdown("""
+        <div style="
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 10px;
+            background-color: #111;
+        " id="chat-history">
+    """, unsafe_allow_html=True)
 
-# Exibir mensagens anteriores
-with chat_container:
+    # Renderiza mensagens
     for msg in st.session_state.historico:
         if msg["autor"] == "usuario":
-            st.markdown(f"**Você:** {msg['texto']}")
+            st.markdown(f"""
+                <div style="text-align: right; margin: 5px;">
+                    <span style="
+                        background-color: #0052cc;
+                        padding: 8px 12px;
+                        border-radius: 12px;
+                        color: white;
+                        display: inline-block;
+                    ">{msg['texto']}</span>
+                </div>
+            """, unsafe_allow_html=True)
         else:
-            st.markdown(f"**IA:** {msg['texto']}")
+            st.markdown(f"""
+                <div style="text-align: left; margin: 5px;">
+                    <span style="
+                        background-color: #333;
+                        padding: 8px 12px;
+                        border-radius: 12px;
+                        color: white;
+                        display: inline-block;
+                    ">{msg['texto']}</span>
+                </div>
+            """, unsafe_allow_html=True)
 
-# Campo de entrada + botão
-with input_container:
-    pergunta = st.text_input("Digite sua pergunta")
-    if st.button("Enviar"):
-        if pergunta.strip():
-            # Salva a pergunta no histórico
-            st.session_state.historico.append({"autor": "usuario", "texto": pergunta})
+    st.markdown("</div>", unsafe_allow_html=True)
 
-            # Aqui você chamaria a OpenAI e geraria a resposta
-            resposta = "Aqui entraria a resposta da IA..."
+# Input fixo
+pergunta = st.text_input("Digite sua pergunta")
 
-            # Salva a resposta no histórico
-            st.session_state.historico.append({"autor": "ia", "texto": resposta})
+if st.button("Enviar"):
+    if pergunta.strip():
+        st.session_state.historico.append({"autor": "usuario", "texto": pergunta})
 
-            # Força o Streamlit a redesenhar a página
-            st.rerun()
+        # Resposta fake por enquanto
+        resposta = "Aqui entraria a resposta da IA..."
+        st.session_state.historico.append({"autor": "ia", "texto": resposta})
+
+        st.rerun()
+        
